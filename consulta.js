@@ -1,7 +1,7 @@
 const pool = require('./db')
 const insertar = async (datos) => {
   const consulta = {
-    text: 'INSERT INTO repertorio values($1, $2, $3)',
+    text: 'INSERT INTO repertorio (cancion, artista, tono) values($1, $2, $3)',
     values: datos,
   }
   try {
@@ -14,21 +14,20 @@ const insertar = async (datos) => {
 }
 const consultar = async () => {
   try {
-    const result = await pool.query('SELECT * FROM ejercicios')
+    const result = await pool.query('SELECT * FROM repertorio')
     return result
   } catch (error) {
     console.log(error.code)
     return error
   }
 }
-const editar = async (datos) => {
+const editar = async (datos, id) => {
   const consulta = {
-    text: `UPDATE ejercicios SET
-  nombre = $1,
-  series = $2,
-  repeticiones = $3,
-  descanso = $4
-  WHERE nombre = $1 RETURNING *`,
+    text: `UPDATE repertorio SET
+  cancion = $1,
+  artista = $2,
+  tono = $3,
+  WHERE id = '' RETURNING *`,
     values: datos,
   }
   try {
@@ -40,10 +39,10 @@ const editar = async (datos) => {
     return error
   }
 }
-const eliminar = async (nombre) => {
+const eliminar = async (id) => {
   try {
     const result = await pool.query(
-      `DELETE FROM ejercicios WHERE nombre = '${nombre}'`
+      `DELETE FROM repertorio WHERE id = '${id}'`
     )
     return result
   } catch (error) {
