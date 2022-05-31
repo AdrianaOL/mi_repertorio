@@ -22,22 +22,23 @@ http
     }
     if (req.url == '/canciones' && req.method === 'GET') {
       const registros = await consultar()
-      res.end(JSON.stringify(registros))
+      res.end(JSON.stringify(registros.rows))
     }
-    if (req.url == '/cancion' && req.method == 'PUT') {
+    if (req.url == '/cancion?' && req.method == 'PUT') {
+     const { id } = url.parse(req.url, true).query
       let body = ''
       req.on('data', (chunk) => {
         body += chunk
       })
       req.on('end', async () => {
         const datos = Object.values(JSON.parse(body))
-        const respuesta = await editar(datos)
+        const respuesta = await editar(datos, id)
         res.end(JSON.stringify(respuesta))
       })
     }
     if (req.url.startsWith('/cancion?') && req.method == 'DELETE') {
-      const { nombre } = url.parse(req.url, true).query
-      const respuesta = await eliminar(nombre)
+      const { id } = url.parse(req.url, true).query
+      const respuesta = await eliminar(id)
       res.end(JSON.stringify(respuesta))
     }
   })
