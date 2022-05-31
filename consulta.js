@@ -26,9 +26,9 @@ const editar = async (datos, id) => {
     text: `UPDATE repertorio SET
   cancion = $1,
   artista = $2,
-  tono = $3,
-  WHERE id = '' RETURNING *`,
-    values: datos,
+  tono = $3
+  WHERE id = $4 RETURNING *`,
+    values:[...datos, id],
   }
   try {
     const result = await pool.query(consulta)
@@ -41,9 +41,7 @@ const editar = async (datos, id) => {
 }
 const eliminar = async (id) => {
   try {
-    const result = await pool.query(
-      `DELETE FROM repertorio WHERE id = '${id}'`
-    )
+    const result = await pool.query(`DELETE FROM repertorio WHERE id = '${id}'`)
     return result
   } catch (error) {
     console.log(error.code)

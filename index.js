@@ -24,7 +24,7 @@ http
       const registros = await consultar()
       res.end(JSON.stringify(registros.rows))
     }
-    if (req.url == '/cancion?' && req.method == 'PUT') {
+    if (req.url.startsWith('/cancion?') && req.method === 'PUT') {
      const { id } = url.parse(req.url, true).query
       let body = ''
       req.on('data', (chunk) => {
@@ -32,6 +32,7 @@ http
       })
       req.on('end', async () => {
         const datos = Object.values(JSON.parse(body))
+        console.log(datos)
         const respuesta = await editar(datos, id)
         res.end(JSON.stringify(respuesta))
       })
